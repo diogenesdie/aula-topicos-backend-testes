@@ -49,7 +49,43 @@ describe("Conjunto de testes app",()=>{
                   .send({});
                   
       
-          expect(res.status).toBe(401);
+        expect(res.status).toBe(401);
+    
+        
+    });
+
+    it("Ao listar todos os clientes o endpoint deve retornar um array",async()=>{
+        const databaseSpy = jest.spyOn(database, 'buscaTodosDados');
+        databaseSpy.mockReturnValue([{codigo:"1",nome:"2",endereco:"3"}]);//gravarDados Sempre Vai Retornar false
+
+      
+        //cenário
+        const esperado=[{codigo:"1",nome:"2",endereco:"3"}];
+
+        //execução
+        const res=await request(app)
+                  .get("/clientes/listar");
+                  
+      
+        expect(res.body).toEqual(esperado);
+    
+        
+    });
+
+    it("Ao listar um cliente pelo código o endpoint deve retornar um objeto",async()=>{
+        const databaseSpy = jest.spyOn(database, 'buscaDados');
+        databaseSpy.mockReturnValue({codigo:"1",nome:"2",endereco:"3"});//gravarDados Sempre Vai Retornar false
+
+      
+        //cenário
+        const esperado={codigo:"1",nome:"2",endereco:"3"};
+
+        //execução
+        const res=await request(app)
+                  .get("/clientes/listar/1");
+                  
+      
+        expect(res.body).toEqual(esperado);
     
         
     });
